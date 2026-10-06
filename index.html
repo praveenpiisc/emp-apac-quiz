@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>EMP APAC Quiz</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:wght@400;600&family=Source+Code+Pro:wght@400;500&display=swap');
+/* Layout: a single journal-style column, ruled sections instead of cards, tables in three-line style.
+   Type: Source Serif 4 for text and headings, Source Sans 3 for small labels, Source Code Pro for OSeMOSYS names.
+   Colour: white paper, near-black ink, navy accent, brick red and green only for answer state. */
+:root{
+  --bg:#ffffff; --surface:#ffffff; --surface2:#f1f3f6; --ink:#16181d; --ink2:#454b57; --muted:#6c7380; --line:#c9ced6; --rule:#16181d;
+  --accent:#1c3c6e; --accent-ink:#ffffff; --accent-soft:#e6ecf5; --ok:#1d6b3c; --ok-bg:#e8f3ec; --no:#9b2c1f; --no-bg:#f9ebe8; --amber:#855000; --amber-bg:#fbf0d9;
+  --serif:'Source Serif 4',Georgia,'Times New Roman',serif; --sans:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif; --mono:'Source Code Pro',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12151b; --surface:#12151b; --surface2:#1b2029; --ink:#e9ecf1; --ink2:#b3b9c4; --muted:#868e9c; --line:#2f3643; --rule:#e9ecf1;
+  --accent:#8fb0ea; --accent-ink:#0f1a2e; --accent-soft:#1d2a42; --ok:#74d39a; --ok-bg:#14291c; --no:#ff9d8f; --no-bg:#33191a; --amber:#f0b85a; --amber-bg:#33260c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151b; --surface:#12151b; --surface2:#1b2029; --ink:#e9ecf1; --ink2:#b3b9c4; --muted:#868e9c; --line:#2f3643; --rule:#e9ecf1;
+  --accent:#8fb0ea; --accent-ink:#0f1a2e; --accent-soft:#1d2a42; --ok:#74d39a; --ok-bg:#14291c; --no:#ff9d8f; --no-bg:#33191a; --amber:#f0b85a; --amber-bg:#33260c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.6;margin:0;padding-inline:16px;padding-block:32px 64px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--serif);margin:0;text-wrap:balance;line-height:1.2;font-weight:600}
+h1{font-size:clamp(28px,5.5vw,38px);font-weight:700;letter-spacing:-.01em} h2{font-size:20px} h3{font-size:16px}
+code{font-family:var(--mono);font-size:.84em;background:var(--surface2);border-radius:2px;padding:1px 4px;white-space:nowrap}
+.eyebrow{font-family:var(--sans);font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:600}
+header{border-bottom:2px solid var(--rule);padding-bottom:18px}
+.lead{color:var(--ink2);margin:10px 0 0;max-width:60ch;font-style:italic}
+.card{border:0;border-top:1px solid var(--line);padding:18px 0 0;display:flex;flex-direction:column;gap:14px;min-width:0;background:none}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px}
+.field{display:flex;flex-direction:column;gap:4px;font-family:var(--sans);font-size:13.5px;color:var(--ink2);min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:16px}
+.row .field{flex:1 1 180px}
+input[type=text],select{font:inherit;font-family:var(--sans);font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:8px 10px;width:100%}
+.btn{font-family:var(--sans);font-weight:600;font-size:15px;border-radius:3px;border:1px solid var(--ink);background:var(--surface);color:var(--ink);padding:9px 18px;cursor:pointer}
+.btn:hover{background:var(--surface2)} .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)} .btn.pri:hover{filter:brightness(1.12)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.topics{display:flex;flex-wrap:wrap;gap:8px}
+.tp{font-family:var(--sans);font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);border-radius:3px;padding:5px 11px;cursor:pointer}
+.tp[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--ink);font-weight:600}
+.tp[aria-pressed="true"]::before{content:"\2713\00a0"}
+.meta{display:flex;justify-content:space-between;gap:12px;font-family:var(--sans);font-size:13.5px;color:var(--ink2);flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px}
+.bar{height:4px;background:var(--surface2);overflow:hidden} .bar>i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.qtext{font-size:clamp(20px,3.6vw,24px);font-weight:600;line-height:1.35;margin:0;text-wrap:pretty}
+.opts{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.opt{width:100%;text-align:left;font:inherit;display:flex;gap:12px;align-items:flex-start;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:3px;padding:11px 14px;cursor:pointer}
+.opt:hover:not([disabled]){border-color:var(--accent);background:var(--accent-soft)}
+.opt .k{font-family:var(--sans);font-weight:600;font-size:14px;color:var(--accent);flex:none;min-width:26px}
+.opt .k::before{content:"("} .opt .k::after{content:")"}
+.opt .tx{min-width:0;overflow-wrap:anywhere}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg);border-width:1.5px} .opt.no{border-color:var(--no);background:var(--no-bg);border-width:1.5px}
+.opt.ok .k{color:var(--ok)} .opt.no .k{color:var(--no)}
+.opt .tag{margin-left:auto;font-family:var(--sans);font-size:12.5px;font-weight:600;white-space:nowrap;padding-left:8px}
+.opt.ok .tag{color:var(--ok)} .opt.no .tag{color:var(--no)}
+.opt[disabled]{cursor:default}
+.fb{border-left:3px solid;padding:10px 14px;display:flex;flex-direction:column;gap:2px;font-size:16px}
+.fb.ok{background:var(--ok-bg);border-color:var(--ok)} .fb.no{background:var(--no-bg);border-color:var(--no)} .fb b{font-family:var(--sans);font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.fb.ok b{color:var(--ok)} .fb.no b{color:var(--no)}
+.score{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.big{font-size:60px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.big small{font-size:26px;color:var(--muted);font-weight:400}
+.tb{display:grid;grid-template-columns:minmax(120px,200px) 1fr 44px;gap:12px;align-items:center;font-family:var(--sans);font-size:14.5px}
+.tb .bar{height:8px} .tb .n{font-family:var(--mono);font-size:13px;text-align:right}
+.rev{display:flex;flex-direction:column;gap:6px;padding:14px 0;border-top:1px solid var(--line)}
+.rev p{margin:0} .rev .you{color:var(--no)} .rev .right{color:var(--ok)} .rev .why{color:var(--ink2);font-size:15px}
+table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:14.5px;border-top:2px solid var(--rule);border-bottom:2px solid var(--rule)}
+th,td{padding:7px 8px;text-align:left;font-variant-numeric:tabular-nums}
+th{font-size:13px;color:var(--ink);font-weight:600;border-bottom:1px solid var(--rule)} td{border-bottom:1px solid var(--line)} tbody tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right} tr.me td{background:var(--accent-soft);font-weight:600}
+.scroll{overflow-x:auto}
+.note{font-family:var(--sans);font-size:13.5px;color:var(--ink2);margin:0}
+.warn{background:var(--amber-bg);color:var(--amber);border-left:3px solid var(--amber);padding:8px 12px;font-family:var(--sans);font-size:13.5px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.cap{font-family:var(--sans);font-size:13px;color:var(--ink2)} .cap b{color:var(--ink)}
+</style>
+<div class="wrap" id="app"></div>
+
+<script>
+const Q = [
+/* Foundations */
+{t:'Foundations',d:1,ch:1,q:'What kind of model is OSeMOSYS?',o:['A long-term, least-cost linear optimisation model of an energy system','A real-time electricity market simulator','An econometric forecasting model fitted to historical demand','A general equilibrium model of the whole economy'],a:0,e:'OSeMOSYS (Open Source Energy Modelling System) is a bottom-up, long-term optimisation model. It chooses the investments and operation that meet demand at the lowest total cost.'},
+{t:'Foundations',d:1,ch:1,q:'What does the OSeMOSYS objective function minimise?',o:['Total discounted system cost over the whole horizon','Peak demand in each year','Installed capacity in the final year','Emissions in the base year'],a:0,e:'The objective is the total discounted cost: capital, fixed and variable operating costs, emission penalties, less salvage value. Every other result follows from that.'},
+{t:'Foundations',d:2,q:'Which assumption does OSeMOSYS make about the future?',o:['Perfect foresight: demand, costs and policies are known for every year of the horizon','Myopic: each year is optimised without knowing later years','Probabilistic: it samples uncertain futures by default','Adaptive: it learns from earlier model runs'],a:0,e:'With perfect foresight the model can invest early for a later need, for example building a plant in 2030 to meet a 2045 cap. Sensitivity runs are how you explore uncertainty.'},
+{t:'Foundations',d:1,q:'Which set lists the commodities that flow between technologies, such as coal, gas and electricity?',o:['`FUEL`','`EMISSION`','`REGION`','`YEAR`'],a:0,e:'In OSeMOSYS every commodity is a `FUEL`, including electricity and demand carriers. Technologies convert one `FUEL` into another.'},
+{t:'Foundations',d:2,q:'Why would a technology be given more than one `MODE_OF_OPERATION`?',o:['To represent alternative ways it can run, each with its own inputs, outputs or costs','To run it in different years of the horizon','To split it across several regions','To model its construction and retirement phases'],a:0,e:'A combined heat and power plant is the standard example: one mode can favour electricity and another heat. Each mode has its own activity ratios and costs.'},
+/* Parameters */
+{t:'Parameters and data',d:1,ch:1,q:'In a given year, the values of `YearSplit` across all time slices must sum to what?',o:['1','8760','100','The number of time slices'],a:0,e:'`YearSplit` is the fraction of the year that each time slice represents, so the fractions add up to one whole year.'},
+{t:'Parameters and data',d:2,ch:1,q:'If capacity is in GW and activity is in PJ, what is `CapacityToActivityUnit`?',o:['31.536','3.6','8.76','365'],a:0,e:'One GW running for a full year produces 8,760 GWh, which is 31.536 PJ. This converts a capacity into the maximum activity it could deliver in a year.'},
+{t:'Parameters and data',d:2,ch:1,q:'Solar PV produces nothing in a night-time slice. Which parameter captures that?',o:['`CapacityFactor`, set by time slice','`AvailabilityFactor`, which is annual','`OperationalLife`','`ResidualCapacity`'],a:0,e:'`CapacityFactor` is defined per time slice, so it can follow a solar profile or a monsoon wind pattern. `AvailabilityFactor` is a single annual share for outages and maintenance.'},
+{t:'Parameters and data',d:3,ch:1,q:'A coal plant is 38% efficient. How do you represent that with the activity ratios?',o:['`OutputActivityRatio` of 1 for electricity and `InputActivityRatio` of about 2.63 for coal','`InputActivityRatio` of 0.38 and `OutputActivityRatio` of 1','Both ratios set to 1 and `CapacityFactor` set to 0.38','Set `AvailabilityFactor` to 0.38'],a:0,e:'Efficiency is output divided by input. For 1 unit of electricity the plant needs 1 / 0.38, about 2.63, units of coal. Capacity and availability factors do not change fuel use per unit of output.'},
+{t:'Parameters and data',d:1,q:'What does `ResidualCapacity` describe?',o:['Capacity already installed at the start of the model, declining as it retires','Capacity the model must build in the first year','The spare capacity left after meeting peak demand','Capacity added through investment variables'],a:0,e:'It is the existing fleet, entered year by year. Calibrating it to the real fleet is one of the first jobs in any country model.'},
+{t:'Parameters and data',d:2,q:'A plant with `OperationalLife` of 30 years is commissioned in 2030. Through which year is it available?',o:['2059','2060','2030','2065'],a:0,e:'Capacity built in year y is available from y to y + life - 1. A 30-year life starting in 2030 therefore ends after 2059.'},
+{t:'Parameters and data',d:2,q:'For each year, what must `SpecifiedDemandProfile` add up to across time slices?',o:['1','The annual demand','The number of time slices','100'],a:0,e:'The profile splits `SpecifiedAnnualDemand` across time slices as fractions. The fractions must total one or demand is lost or invented.'},
+{t:'Parameters and data',d:1,q:'Which cost is charged per unit of installed capacity each year, whether or not the plant runs?',o:['`FixedCost`','`VariableCost`','`CapitalCost`','`EmissionsPenalty`'],a:0,e:'`CapitalCost` is paid on new capacity, `VariableCost` per unit of activity, and `FixedCost` per unit of capacity per year.'},
+{t:'Parameters and data',d:2,q:'Capital cost is in M$/GW and activity is in PJ. What unit should `VariableCost` use?',o:['M$/PJ','$/GW','M$/GWh','PJ/M$'],a:0,e:'Keep one consistent unit system. Money in M$ and activity in PJ gives variable cost in M$/PJ. Mixed units are a common source of results that look wrong.'},
+{t:'Parameters and data',d:2,q:'Which parameter limits how much new capacity of a technology can be added in a single year?',o:['`TotalAnnualMaxCapacityInvestment`','`TotalAnnualMaxCapacity`','`ResidualCapacity`','`CapacityToActivityUnit`'],a:0,e:'`TotalAnnualMaxCapacityInvestment` caps annual additions, which models supply chain or build-rate limits. `TotalAnnualMaxCapacity` caps the total installed stock.'},
+{t:'Parameters and data',d:3,ch:1,q:'What usually happens to the mix when you raise the discount rate?',o:['Capital-intensive options such as nuclear, hydro and solar become less attractive','Fuel-intensive options become less attractive','Nothing changes, because the discount rate only rescales costs','Demand falls automatically'],a:0,e:'A higher discount rate weights near-term spending more heavily and distant spending less. Technologies with high upfront cost and low running cost lose ground.'},
+{t:'Parameters and data',d:2,q:'Which tool is commonly used to convert OSeMOSYS data between formats such as data file, CSV and Excel?',o:['otoole','PyPSA','pandas alone','Gurobi'],a:0,e:'`otoole` is the OSeMOSYS tools package for converting, validating and processing model data and results.'},
+/* Power sector */
+{t:'Power sector',d:2,ch:1,q:'What is the reserve margin constraint for?',o:['To keep firm capacity above peak demand by a set margin','To cap emissions in the peak hour','To force a share of renewables','To limit how fast capacity can be built'],a:0,e:'It makes the system carry enough credited capacity to cover peak demand plus a margin for outages and forecast error. Without it a model can look cheap but unreliable.'},
+{t:'Power sector',d:2,q:'Why do more time slices matter in a system with a lot of solar and wind?',o:['They capture daily and seasonal variability and the peak, at the cost of a larger model','They make the model faster to solve','They remove the need for a reserve margin','They increase the demand in the model'],a:0,e:'Few slices average away variability and understate the need for flexibility. More slices add rows and columns, so solve time grows.'},
+{t:'Power sector',d:3,q:'Midday solar output exceeds demand and there is no storage. What does an OSeMOSYS run do with the excess?',o:['It is curtailed, or less solar capacity is built, because output beyond demand has no value','The model becomes infeasible','It is exported automatically to a neighbouring region','It is stored in the grid for free'],a:0,e:'Production must meet demand but is not forced to equal the maximum the capacity factor allows. Excess is effectively curtailed, which shows up as a low realised capacity factor.'},
+{t:'Power sector',d:1,ch:1,q:'Which of these can be dispatched when the system operator needs it?',o:['Reservoir hydropower','Solar PV without storage','Onshore wind','Rooftop solar'],a:0,e:'Firm dispatchable capacity is not tied to the weather. Reservoir hydro, gas turbines, nuclear and storage qualify. Solar and wind depend on resource availability.'},
+{t:'Power sector',d:2,q:'Coal capacity is the same in 2050 as in 2030, but coal generation has halved. What is the most plausible reading?',o:['Coal plants run at a lower capacity factor, probably as backup or for reserve','The model has a data error','Half the coal capacity is not counted','Coal efficiency has doubled'],a:0,e:'Capacity and generation are different results. A plant kept for firm capacity can sit idle for much of the year. Compare `TotalCapacityAnnual` with `ProductionByTechnologyAnnual`.'},
+{t:'Power sector',d:3,q:'Why add a high-cost "unmet demand" backstop technology?',o:['It keeps the model feasible and shows where demand cannot be met at reasonable cost','It lowers total system cost','It represents rooftop solar','It replaces the reserve margin'],a:0,e:'When the model reports unmet demand, a limit is binding somewhere: a cap, a build limit or a missing option. The backstop turns an infeasible run into a diagnostic.'},
+/* MUIO workflow */
+{t:'MUIO workflow',d:1,q:'What is MUIO used for?',o:['Building, running and viewing OSeMOSYS models through a graphical browser interface','Downloading national energy statistics','Converting OSeMOSYS into a market simulator','Replacing the solver'],a:0,e:'MUIO lets you enter sets and parameters in forms, define scenarios, run the model and view results without hand-writing a data file.'},
+{t:'MUIO workflow',d:1,q:'What is a sensible order of work in a model interface?',o:['Define sets, enter parameter data, create scenarios, run, then view results','Run first, then enter data to fix errors','Create scenarios, run, then define the sets','View results, then define the sets and data'],a:0,e:'The structure (technologies, fuels, years, time slices) has to exist before parameters can be entered against it. Scenarios modify that data, and a run needs all of it.'},
+{t:'MUIO workflow',d:1,q:'Which of these is a free, open-source solver commonly used with OSeMOSYS?',o:['GLPK','CPLEX','Gurobi','Excel Solver'],a:0,e:'GLPK and CBC are free. CPLEX and Gurobi are commercial and faster on large models. HiGHS is another open-source option. The interface writes the data and the solver does the optimisation.'},
+{t:'MUIO workflow',d:2,ch:1,q:'A run returns "infeasible". What is the best first step?',o:['Check whether caps, build limits or retirements make it impossible to meet demand, and add a backstop to locate the problem','Delete the scenario and start again','Double all the capital costs','Change the solver'],a:0,e:'Infeasibility is almost always a data or constraint conflict, such as an emission cap that existing and allowed technologies cannot satisfy. The solver is rarely the cause.'},
+/* Scenarios */
+{t:'Scenarios',d:1,ch:1,q:'What does a business-as-usual (BAU) scenario represent?',o:['Current policies and trends continuing, with no additional climate or energy measures','The cheapest possible system with no constraints at all','A scenario where all coal is retired immediately','The calibrated base year repeated'],a:0,e:'BAU is the reference path. Policy scenarios such as a net-zero pathway are read against it.'},
+{t:'Scenarios',d:2,q:'What does the cost difference between a net-zero scenario and BAU tell you?',o:['The incremental system cost of the policy, under the model assumptions','The total cost of the energy system','The profit of the power sector','The error of the calibration'],a:0,e:'Both scenarios share the same demand and cost data, so the difference isolates the cost of the added constraint.'},
+{t:'Scenarios',d:1,q:'Which parameter sets a limit on yearly emissions?',o:['`AnnualEmissionLimit`','`EmissionActivityRatio`','`CapacityFactor`','`YearSplit`'],a:0,e:'`EmissionActivityRatio` says how much a technology emits per unit of activity. `AnnualEmissionLimit` is the cap. `EmissionsPenalty` is a carbon price instead of a cap.'},
+{t:'Scenarios',d:3,ch:1,q:'In a run with an emission cap, what does the shadow price of that cap represent?',o:['The marginal abatement cost: the cost of cutting one more tonne at the limit','The carbon price already in the input data','The total cost of the cap','The emission factor of the dirtiest plant'],a:0,e:'The shadow price is how much total cost would fall if the cap were relaxed by one unit. It tells you how expensive the last tonne of abatement is.'},
+{t:'Scenarios',d:2,q:'What is good practice when comparing scenarios?',o:['Change one assumption at a time against a shared reference so differences can be attributed','Change every assumption at once to save time','Use different base-year data in each scenario','Compare only the final-year result'],a:0,e:'A clean comparison needs a controlled difference. Changing many things at once makes it impossible to say what drove the result.'},
+{t:'Scenarios',d:2,q:'Why run sensitivities on demand growth and fuel prices?',o:['Because they are uncertain, and you want to see which conclusions hold up','To make the model solve faster','Because OSeMOSYS requires three sensitivities','To remove the need for a BAU scenario'],a:0,e:'Perfect foresight hides uncertainty inside one run. Sensitivities show whether a pathway is robust or depends on one assumption.'},
+{t:'Scenarios',d:3,q:'How could you stress-test a power system against a low-solar climate year?',o:['Lower the solar `CapacityFactor` in the affected time slices and compare with the unstressed run','Increase the `DiscountRate`','Remove the `ReserveMargin`','Double `YearSplit` for the day slices'],a:0,e:'Reducing the solar capacity factor represents adverse resource conditions. Comparing against the base run shows how much extra firm capacity or cost the system needs.'},
+/* Results */
+{t:'Calibration and results',d:1,ch:1,q:'Why calibrate a model to the base year?',o:['So that it reproduces observed capacity, generation and emissions and can be trusted for projections','To make the future results lower','To remove the need for demand projections','Because the solver requires it'],a:0,e:'If the model cannot reproduce the present system, its future pathways are hard to defend. Compare base-year generation by fuel, capacity and emissions against official statistics.'},
+{t:'Calibration and results',d:2,q:'Which result gives annual electricity generation by technology?',o:['`ProductionByTechnologyAnnual`','`NewCapacity`','`TotalCapacityAnnual`','`AnnualEmissions`'],a:0,e:'`NewCapacity` is what was built in a year, `TotalCapacityAnnual` is installed capacity, and `ProductionByTechnologyAnnual` is output.'},
+{t:'Calibration and results',d:2,q:'Base-year model generation is 20% higher than national statistics. What should you check first?',o:['Demand, capacity factors and efficiency inputs against the statistics','The solver version','The colours used in the charts','Nothing, because the base year does not matter'],a:0,e:'Generation is driven by demand, so check `SpecifiedAnnualDemand` and the profile. Then check whether capacity factors, efficiencies or losses explain the gap.'},
+];
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+const TOPICS = [...new Set(Q.map(q => q.t))];
+const COUNTRIES = ['India', 'Pakistan', 'Bangladesh', 'Nepal', 'Thailand', 'Indonesia', 'Vietnam', 'Other'];
+const LETTERS = ['A', 'B', 'C', 'D'];
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { } } };
+let st = { screen: 'home', mode: 'challenge', list: [], i: 0, picked: null, results: [], t0: 0, secs: 0, sel: new Set(TOPICS), count: 10 };
+let me = { name: store.get('emp.name') || '', country: store.get('emp.country') || 'India' };
+let db = null, uid = null, board = [], dbState = 'pending', submitMsg = '';
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const prep = q => ({ q, opts: shuffle(q.o.map((t, i) => ({ t, ok: i === q.a }))) });
+
+function home() {
+  const ch = Q.filter(q => q.ch).length;
+  $('#app').innerHTML = `
+  <header><div class="eyebrow">EMP APAC · OSeMOSYS training · Self-assessment</div><h1>Check what you know before the scenarios</h1>
+  <p class="lead">Questions on OSeMOSYS structure, parameters, power-sector modelling, scenarios and reading results. Every answer comes with a short explanation.</p></header>
+  <section class="card"><h2>Who is playing</h2><div class="row">
+    <label class="field">Display name<input type="text" id="nm" maxlength="24" value="${esc(me.name)}" placeholder="Name or nickname" autocomplete="nickname"></label>
+    <label class="field">Country<select id="cn">${COUNTRIES.map(c => `<option${c === me.country ? ' selected' : ''}>${c}</option>`).join('')}</select></label></div></section>
+  <div class="two">
+    <section class="card"><div><div class="eyebrow">Same questions for everyone</div><h2>Challenge round</h2></div>
+      <p class="note">${ch} questions, shuffled answers. Your best score and time go on the shared leaderboard.</p>
+      <div class="actions"><button class="btn pri" id="go-ch">Start challenge</button></div></section>
+    <section class="card"><div><div class="eyebrow">At your own pace</div><h2>Practice by topic</h2></div>
+      <div class="topics" id="tps">${TOPICS.map(t => `<button class="tp" data-t="${esc(t)}" aria-pressed="${st.sel.has(t)}">${esc(t)}</button>`).join('')}</div>
+      <label class="field">Questions<select id="cnt"><option value="10">10 questions</option><option value="20">20 questions</option><option value="99">All in selected topics</option></select></label>
+      <div class="actions"><button class="btn pri" id="go-pr">Start practice</button></div></section>
+  </div>
+  <section class="card"><h2>Leaderboard</h2><p class="cap">Best challenge-round result per participant, ranked by score, then time.</p><div id="lb"></div></section>`;
+  $('#cnt').value = String(st.count);
+  $('#nm').oninput = e => { me.name = e.target.value; store.set('emp.name', me.name); };
+  $('#cn').onchange = e => { me.country = e.target.value; store.set('emp.country', me.country); };
+  document.querySelectorAll('.tp').forEach(b => b.onclick = () => { const t = b.dataset.t; st.sel.has(t) ? st.sel.delete(t) : st.sel.add(t); b.setAttribute('aria-pressed', st.sel.has(t)); $('#go-pr').disabled = !st.sel.size; });
+  $('#cnt').onchange = e => st.count = +e.target.value;
+  $('#go-ch').onclick = () => start('challenge');
+  $('#go-pr').onclick = () => start('practice');
+  $('#go-pr').disabled = !st.sel.size;
+  renderBoard();
+}
+function start(mode) {
+  st.mode = mode;
+  let pool = mode === 'challenge' ? Q.filter(q => q.ch) : Q.filter(q => st.sel.has(q.t));
+  pool = shuffle(pool); if (mode === 'practice') pool = pool.slice(0, st.count);
+  st.list = pool.map(prep); st.i = 0; st.picked = null; st.results = []; st.t0 = Date.now(); submitMsg = '';
+  st.screen = 'quiz'; question();
+}
+function question() {
+  const it = st.list[st.i], n = st.list.length, ok = st.results.filter(r => r.ok).length;
+  const done = st.picked !== null, right = done && it.opts[st.picked].ok;
+  $('#app').innerHTML = `
+  <div class="meta"><span>Question ${st.i + 1} of ${n} · ${esc(it.q.t)}</span><span>${ok} correct so far</span></div>
+  <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${st.i + (done ? 1 : 0)}"><i style="width:${(st.i + (done ? 1 : 0)) / n * 100}%"></i></div>
+  <section class="card"><p class="qtext" id="qt">${fmt(it.q.q)}</p>
+  <ul class="opts" role="group" aria-labelledby="qt">${it.opts.map((o, k) => {
+    let cls = '', tag = '';
+    if (done) { if (o.ok) { cls = 'ok'; tag = 'Correct'; } else if (k === st.picked) { cls = 'no'; tag = 'Your answer'; } }
+    return `<li><button class="opt ${cls}" data-k="${k}" ${done ? 'disabled' : ''}><span class="k">${LETTERS[k]}</span><span class="tx">${fmt(o.t)}</span>${tag ? `<span class="tag">${tag}</span>` : ''}</button></li>`; }).join('')}</ul>
+  ${done ? `<div class="fb ${right ? 'ok' : 'no'}" role="status"><b>${right ? 'Correct' : 'Not quite'}</b><span>${fmt(it.q.e)}</span></div><div class="actions"><button class="btn pri" id="nx">${st.i + 1 < n ? 'Next question' : 'See results'}</button></div>` : '<p class="note">Choose an answer. Keys 1 to 4 also work.</p>'}</section>`;
+  document.querySelectorAll('.opt').forEach(b => b.onclick = () => pick(+b.dataset.k));
+  const nx = $('#nx'); if (nx) { nx.onclick = next; nx.focus({ preventScroll: true }); }
+}
+function pick(k) {
+  if (st.picked !== null) return; const it = st.list[st.i];
+  st.picked = k; st.results.push({ q: it.q, ok: it.opts[k].ok, you: it.opts[k].t, right: it.opts.find(o => o.ok).t }); question();
+}
+function next() { if (st.i + 1 < st.list.length) { st.i++; st.picked = null; question(); window.scrollTo(0, 0); } else { st.secs = Math.round((Date.now() - st.t0) / 1000); result(); window.scrollTo(0, 0); } }
+document.addEventListener('keydown', e => {
+  if (st.screen !== 'quiz' || e.target.matches('input,select,textarea')) return;
+  if (st.picked === null && /^[1-4]$/.test(e.key)) pick(+e.key - 1);
+  else if (st.picked !== null && e.key === 'Enter' && document.activeElement.id !== 'nx') next();
+});
+function result() {
+  st.screen = 'result';
+  const n = st.results.length, c = st.results.filter(r => r.ok).length, pct = c / n;
+  const msg = pct >= .8 ? 'Strong. You are ready to build and compare scenarios.' : pct >= .5 ? 'A solid base. Review the misses below before the hands-on sessions.' : 'Worth another pass. Try practice mode on the topics that scored lowest.';
+  const by = {}; st.results.forEach(r => { const b = by[r.q.t] || (by[r.q.t] = { c: 0, n: 0 }); b.n++; if (r.ok) b.c++; });
+  const miss = st.results.filter(r => !r.ok);
+  $('#app').innerHTML = `
+  <header><div class="eyebrow">${st.mode === 'challenge' ? 'Challenge round' : 'Practice'} complete</div>
+  <div class="score"><div class="big">${c}<small> / ${n}</small></div><div class="note">${Math.round(pct * 100)}% · ${Math.floor(st.secs / 60)}m ${st.secs % 60}s</div></div><p class="lead">${msg}</p></header>
+  <section class="card"><h2>Score by topic</h2><p class="cap"><b>Table 1.</b> Correct answers per topic in this attempt.</p>${Object.keys(by).map(t => `<div class="tb"><span>${esc(t)}</span><div class="bar"><i style="width:${by[t].c / by[t].n * 100}%"></i></div><span class="n">${by[t].c}/${by[t].n}</span></div>`).join('')}</section>
+  ${miss.length ? `<section class="card"><h2>Review what you missed</h2>${miss.map(r => `<div class="rev"><p><b>${fmt(r.q.q)}</b></p><p class="you">You chose: ${fmt(r.you)}</p><p class="right">Correct: ${fmt(r.right)}</p><p class="why">${fmt(r.q.e)}</p></div>`).join('')}</section>` : '<section class="card"><h2>No misses</h2><p class="note">Every answer was right.</p></section>'}
+  ${st.mode === 'challenge' ? `<section class="card"><h2>Leaderboard</h2><p class="cap"><b>Table 2.</b> Best challenge-round result per participant, ranked by score, then time.</p><p class="note" id="sub">${esc(submitMsg)}</p><div id="lb"></div></section>` : ''}
+  <div class="actions"><button class="btn pri" id="again">${st.mode === 'challenge' ? 'Play the challenge again' : 'Practice again'}</button><button class="btn" id="hm">Back to start</button></div>`;
+  $('#again').onclick = () => start(st.mode); $('#hm').onclick = () => { st.screen = 'home'; home(); window.scrollTo(0, 0); };
+  if (st.mode === 'challenge') { renderBoard(); submit(c, n); }
+}
+
+/* ---- leaderboard (shared db, optional) ---- */
+function renderBoard() {
+  const el = $('#lb'); if (!el) return;
+  if (dbState === 'pending') { el.innerHTML = '<p class="note">Connecting to the shared leaderboard…</p>'; return; }
+  if (dbState === 'off') { el.innerHTML = '<p class="warn">The shared leaderboard needs a signed-in view of this page. You can still play. Your own best score is kept on this device.</p>'; return; }
+  if (!board.length) { el.innerHTML = '<p class="note">No scores yet. Finish the challenge round to be the first.</p>'; return; }
+  const rows = board.slice().sort((a, b) => b.correct - a.correct || a.secs - b.secs).slice(0, 25);
+  el.innerHTML = `<div class="scroll"><table><thead><tr><th class="n">#</th><th>Name</th><th>Country</th><th class="n">Score</th><th class="n">Time</th></tr></thead><tbody>${rows.map((r, i) => `<tr class="${r.id === uid ? 'me' : ''}"><td class="n">${i + 1}</td><td>${esc(r.name)}${r.id === uid ? ' (you)' : ''}</td><td>${esc(r.country)}</td><td class="n">${r.correct}/${r.total}</td><td class="n">${Math.floor(r.secs / 60)}:${String(r.secs % 60).padStart(2, '0')}</td></tr>`).join('')}</tbody></table></div>`;
+}
+async function submit(correct, total) {
+  const set = m => { submitMsg = m; const s = $('#sub'); if (s) s.textContent = m; };
+  const name = (me.name || '').trim().slice(0, 24) || 'Anonymous';
+  const prev = JSON.parse(store.get('emp.best') || 'null');
+  if (!prev || correct > prev.correct || (correct === prev.correct && st.secs < prev.secs)) store.set('emp.best', JSON.stringify({ correct, secs: st.secs }));
+  if (!db || !uid) { set('Score not posted: the shared leaderboard is not available in this view.'); return; }
+  try {
+    const ref = db.doc('scores/' + uid), snap = await ref.get(), old = snap.exists ? snap.data() : null;
+    const better = !old || correct > old.correct || (correct === old.correct && st.secs < old.secs);
+    if (better) { await ref.set({ name, country: me.country, correct, total, secs: st.secs, ts: Date.now() }); set('Posted to the leaderboard.'); }
+    else { await ref.update({ name, country: me.country }); set(`Your best of ${old.correct}/${old.total} stays on the leaderboard.`); }
+  } catch (e) { set('Could not post your score (' + ((e && e.code) || 'error') + '). Ask the facilitator whether this page is shared with you.'); }
+}
+async function connect() {
+  try {
+    const c = window.claude; if (!c || !c.use) throw 0;
+    db = await c.use('db'); const u = await c.use('user');
+    if (!db || !u) throw 0; uid = await u.id();
+    db.collection('scores').limit(100).onSnapshot(s => { board = s.docs.map(d => Object.assign({ id: d.id }, d.data())).filter(r => typeof r.correct === 'number'); dbState = 'on'; renderBoard(); }, () => { dbState = 'off'; renderBoard(); });
+  } catch (e) { db = null; dbState = 'off'; renderBoard(); }
+}
+home(); connect();
+
+</script>
+
+</body>
+</html>
